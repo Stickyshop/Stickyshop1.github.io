@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Shop | Owner Dashboard ✨</title>
+    <style>
+        :root {
+            --primary-red: #ff4d4d;
+            --light-red: #ffe5e5;
+            --dark-red: #d90429;
+            --soft-cream: #fffafa;
+            --text-color: #332222;
+            --accent-gold: #d4af37;
+            --border-color: #f1dbdb;
+            --admin-bg: #fffdf0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--soft-cream);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--light-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--dark-red);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--light-red) 0%, #fff0f0 100%);
+            padding: 80px 5%;
+            text-align: center;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            color: var(--dark-red);
+            margin-bottom: 15px;
+        }
+
+        #admin-panel {
+            display: none;
+            background-color: var(--admin-bg);
+            border: 3px dashed var(--accent-gold);
+            border-radius: 25px;
+            padding: 35px;
+            max-width: 650px;
+            margin: 30px auto;
+            box-shadow: 0 10px 25px rgba(217, 4, 41, 0.05);
+        }
+
+        .admin-title {
+            color: #b52a12;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .admin-section {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #f3d4b9;
+        }
+
+        .admin-section h4 {
+            color: #8a1c0c;
+            margin-bottom: 12px;
+            font-size: 16px;
+            border-bottom: 1px red dashed;
+            padding-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: white;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .file-input-wrapper {
+            background: white;
+            border: 2px dashed var(--primary-red);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: var(--dark-red);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        #product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 10px 0;
+        }
+
+        .product-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--primary-red);
+            position: relative;
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 200px;
+            background-color: var(--light-red);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-img-placeholder {
+            font-size: 45px;
+        }
+
+        .product-name { font-weight: bold; margin-bottom: 8px; }
+        .product-price { color: var(--accent-gold); font-weight: bold; margin-bottom: 15px; }
+
+        .remove-stock-btn {
+            display: block;
+            width: 100%;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .remove-stock-btn:hover {
+            background-color: #ff1a1a;
+        }
+
+        footer {
+            background-color: var(--light-red);
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+
+        .admin-trigger {
+            display: block;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--dark-red);
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">Sticky Shop Admin ✨</a>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div class="hero">
+            <h1>Owner Management Portal ✨</h1>
+            <p>Access inventory controls, customize storefront text, and manage active stock.</p>
+            <span class="admin-trigger" onclick="checkOwnerPassword()">🔐 Click to Unlock Dashboard</span>
+        </div>
+
+        <!-- Dynamic Locked Admin Dashboard -->
+        <div id="admin-panel">
+            <h3 class="admin-title">👑 Sticky Shop Control Center</h3>
+            
+            <!-- NEW SECTION: CUSTOMIZE STORE TEXT -->
+            <div class="admin-section">
+                <h4>✍️ Customize Website Text</h4>
+                <div class="form-group">
+                    <label>Store Name (Header Logo)</label>
+                    <input type="text" id="custom-logo" placeholder="e.g. Sticky Shop ✨">
+                </div>
+                <div class="form-group">
+                    <label>Hero Heading (Main Title)</label>
+                    <input type="text" id="custom-hero-title" placeholder="e.g. Stick Your Style Anywhere ✨">
+                </div>
+                <div class="form-group">
+                    <label>Hero Subheading (Description)</label>
+                    <textarea id="custom-hero-sub" placeholder="e.g. Customize your world with our collection of aesthetic stickers and pins."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Catalog Title (Above the items)</label>
+                    <input type="text" id="custom-catalog-title" placeholder="e.g. Our Collection">
+                </div>
+                <div class="form-group">
+                    <label>Footer Copyright Text</label>
+                    <input type="text" id="custom-footer" placeholder="e.g. &copy; 2026 Sticky Shop. All Rights Reserved.">
+                </div>
+                <button type="button" class="submit-btn" style="background-color: #e65c00; margin-bottom: 15px;" onclick="saveCustomText()">📝 Update Website Text</button>
+            </div>
+
+            <div class="admin-section">
+                <h4>⚙️ Store Security, Socials & Notifications</h4>
+                <div class="form-group">
+                    <label>Linked Email (Where orders are received)</label>
+                    <input type="email" id="owner-email" placeholder="owner@stickyshop.com">
+                </div>
+                <div class="form-group">
+                    <label>Instagram Link</label>
+                    <input type="url" id="owner-instagram" placeholder="https://instagram.com/yourshop">
+                </div>
+                <div class="form-group">
+                    <label>TikTok Link</label>
+                    <input type="url" id="owner-tiktok" placeholder="https://tiktok.com/@yourshop">
+                </div>
+                <div class="form-group">
+                    <label>Change Dashboard Password</label>
+                    <input type="text" id="change-password-field" placeholder="Enter new password">
+                </div>
+                <button type="button" class="submit-btn" style="background-color: #b52a12;" onclick="updateOwnerSettings()">💾 Save Socials & Password</button>
+            </div>
+
+            <div class="admin-section">
+                <h4>🛍️ Add New Product Stock</h4>
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="new-name" placeholder="e.g. Glossy Star Sticker">
+                </div>
+                <div class="form-group">
+                    <label>Price (DA)</label>
+                    <input type="text" id="new-price" placeholder="e.g. 150 DA">
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="new-image" accept="image/*">
+                    </div>
+                </div>
+                <button type="button" class="submit-btn" style="background-color: var(--dark-red);" onclick="addNewProduct()">✨ Upload & Add to Shop</button>
+            </div>
+        </div>
+
+        <section id="shop">
+            <h2 style="margin-bottom: 20px; text-align: center; color: var(--dark-red);">Active Live Storefront Catalog View</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 14px; color: #8c7373;">(Only visible to you: Click "Sold Out" below to remove any item permanently from the store)</p>
+            <div id="product-container"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Sticky Shop Admin Panel.</p>
+    </footer>
+
+    <script>
+        var defaultProducts = [
+            { id: 1, name: "Aesthetic Vinyl Sticker Pack", price: "400 DA", icon: "✨" },
+            { id: 2, name: "Custom Handmade Clay Pin", price: "600 DA", icon: "🎨" },
+            { id: 3, name: "Holographic Starry Sticker", price: "150 DA", icon: "⭐️" }
+        ];
+
+        if (!localStorage.getItem('sticky_products')) {
+            localStorage.setItem('sticky_products', JSON.stringify(defaultProducts));
+        }
+        if (!localStorage.getItem('sticky_admin_password')) {
+            localStorage.setItem('sticky_admin_password', 'STICKY2026'); 
+        }
+        if (!localStorage.getItem('sticky_owner_email')) {
+            localStorage.setItem('sticky_owner_email', 'contact@stickyshop.com');
+        }
+
+        // Fill Current Settings on Load
+        document.getElementById('owner-email').value = localStorage.getItem('sticky_owner_email');
+        if(localStorage.getItem('sticky_owner_instagram')) document.getElementById('owner-instagram').value = localStorage.getItem('sticky_owner_instagram');
+        if(localStorage.getItem('sticky_owner_tiktok')) document.getElementById('owner-tiktok').value = localStorage.getItem('sticky_owner_tiktok');
+        document.getElementById('change-password-field').placeholder = "Current: " + localStorage.getItem('sticky_admin_password');
+
+        // Fill Current Custom Texts on Load
+        document.getElementById('custom-logo').value = localStorage.getItem('text_store_logo') || "Sticky Shop ✨";
+        document.getElementById('custom-hero-title').value = localStorage.getItem('text_hero_title') || "Stick Your Style Anywhere ✨";
+        document.getElementById('custom-hero-sub').value = localStorage.getItem('text_hero_subtitle') || "Customize your world with our collection of aesthetic stickers and pins.";
+        document.getElementById('custom-catalog-title').value = localStorage.getItem('text_catalog_title') || "Our Collection";
+        document.getElementById('custom-footer').value = localStorage.getItem('text_footer_text') || "© 2026 Sticky Shop. All Rights Reserved.";
+
+        renderProducts();
+
+        function renderProducts() {
+            var products = JSON.parse(localStorage.getItem('sticky_products')) || [];
+            var container = document.getElementById('product-container');
+            container.innerHTML = "";
+
+            products.forEach(function(prod) {
+                var card = document.createElement('div');
+                card.className = 'product-card';
+                card.id = "product-" + prod.id;
+                
+                var imgContent = prod.image ? `<img src="${prod.image}" alt="${prod.name}">` : `<div class="product-img-placeholder">${prod.icon || '✨'}</div>`;
+
+                card.innerHTML = `
+                    <div class="product-img-wrapper">${imgContent}</div>
+                    <div class="product-name">${prod.name}</div>
+                    <div class="product-price">${prod.price}</div>
+                    <button class="remove-stock-btn" onclick="removeItem(${prod.id})">🚫 Sold Out / Remove</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function checkOwnerPassword() {
+            var currentSavedPassword = localStorage.getItem('sticky_admin_password');
+            var passwordInput = prompt("Enter Owner Admin Password:");
+            
+            if (passwordInput === currentSavedPassword) {
+                document.getElementById('admin-panel').style.display = 'block';
+                window.scrollTo({top: document.getElementById('admin-panel').offsetTop - 80, behavior: 'smooth'});
+                alert("Success! Your owner panel is now unlocked.");
+            } else {
+                alert("Access Denied: Incorrect password.");
+            }
+        }
+
+        function saveCustomText() {
+            var logo = document.getElementById('custom-logo').value;
+            var heroTitle = document.getElementById('custom-hero-title').value;
+            var heroSub = document.getElementById('custom-hero-sub').value;
+            var catTitle = document.getElementById('custom-catalog-title').value;
+            var footerText = document.getElementById('custom-footer').value;
+
+            localStorage.setItem('text_store_logo', logo);
+            localStorage.setItem('text_hero_title', heroTitle);
+            localStorage.setItem('text_hero_subtitle', heroSub);
+            localStorage.setItem('text_catalog_title', catTitle);
+            localStorage.setItem('text_footer_text', footerText);
+
+            alert("📝 Storefront text updated successfully! Refresh your main shop page to see the new text.");
+        }
+
+        function updateOwnerSettings() {
+            var emailVal = document.getElementById('owner-email').value;
+            var instaVal = document.getElementById('owner-instagram').value;
+            var tiktokVal = document.getElementById('owner-tiktok').value;
+            var passField = document.getElementById('change-password-field').value;
+
+            if (instaVal) localStorage.setItem('sticky_owner_instagram', instaVal);
+            if (tiktokVal) localStorage.setItem('sticky_owner_tiktok', tiktokVal);
+            if (emailVal) localStorage.setItem('sticky_owner_email', emailVal);
+
+            if (passField.trim() !== "") {
+                localStorage.setItem('sticky_admin_password', passField.trim());
+                document.getElementById('change-password-field').value = "";
+                document.getElementById('change-password-field').placeholder = "Current: " + passField.trim();
+                alert("💾 Settings saved! Password changed to: " + passField.trim());
+            } else {
+                alert("💾 Store configurations saved successfully!");
+            }
+        }
+
+        function addNewProduct() {
+            var name = document.getElementById('new-name').value;
+            var price = document.getElementById('new-price').value;
+            var imageInput = document.getElementById('new-image');
+
+            if (!name || !price) {
+                alert("Please complete both product name and pricing fields.");
+                return;
+            }
+
+            if (!price.toUpperCase().includes("DA")) { price += " DA"; }
+
+            var newProd = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                icon: "✨"
+            };
+
+            if (imageInput.files && imageInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    newProd.image = e.target.result;
+                    saveAndRender(newProd);
+                }
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                saveAndRender(newProd);
+            }
+
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-price').value = '';
+            imageInput.value = '';
+        }
+
+        function saveAndRender(newProd) {
+            var products = JSON.parse(localStorage.getItem('sticky_products')) || [];
+            products.push(newProd);
+            localStorage.setItem('sticky_products', JSON.stringify(products));
+            renderProducts();
+            alert("Success: Product uploaded live to stock database!");
+        }
+
+        function removeItem(id) {
+            var confirmDelete = confirm("Are you sure this product is sold out? It will be removed from your catalog.");
+            if (confirmDelete) {
+                var products = JSON.parse(localStorage.getItem('sticky_products')) || [];
+                products = products.filter(function(prod) {
+                    return prod.id !== id;
+                });
+                localStorage.setItem('sticky_products', JSON.stringify(products));
+                renderProducts();
+                alert("Item successfully cleared from inventory.");
+            }
+        }
+    </script>
+</body>
+</html>
